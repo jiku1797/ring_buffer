@@ -5,11 +5,13 @@
 #include <array>
 #include <algorithm>
 
+#include "ring_buffer_iterator.h"
+
 namespace sr = std::ranges;
 
-template<typename T, std::size_t N>
+/*template<typename T, std::size_t N>
     requires (N > 1)
-class ring_buffer_iterator;
+class ring_buffer_iterator;*/
 
 template<typename T, std::size_t N>
     requires(N > 1)
@@ -130,7 +132,81 @@ public:
         return data_[tail_];
     }
 
+    constexpr void push_back(const T& value)
+    {
+        if(empty())
+        {
+            data_[tail_] = value;
+            ++size_;
+        }
+        else if(!full())
+        {
+            data_[++tail_] = value;
+            ++size_;
+        }
+        else
+        {
+            head_ = (head_ + 1) % N;
+            tail_ = (tail_ + 1) % N;
+            data_[tail_] = value;
+        }
+    }
+
+    constexpr void push_back(T&& value)
+    {
+        if(empty())
+        {
+            data_[tail_] = std::move(value);
+            ++size_;
+        }
+        else if(!full())
+        {
+            data_[++tail_] = std::move(value);
+            ++size_;
+        }
+        else
+        {
+            head_ = (head_ + 1) % N;
+            tail_ = (tail_ + 1) % N;
+            data_[tail_] = std::move(value);
+        }
+    }
+
+    constexpr T pop_front()
+    {
+        if(empty())
+        {
+            throw std::logic_error("Empty buffer");
+        }
+
+        --size_;
+
+        return data_[std::exchange(head_, (head_ + 1) % N )];
+    }
+
+    iterator begin()
+    {
+        return iterator(*this, 0);
+    }
+
+    iterator end()
+    {
+        return iterator(*this, size_);
+    }
+
+    const_iterator begin() const
+    {
+        return const_iterator(*this, 0);
+    }
+
+    const_iterator end() const
+    {
+        return const_iterator(*this, size_);
+    }
+
 private:
+    friend ring_buffer_iterator<T, N>;
+
     std::array<T, N> data_{};
     size_type head_ = 0;
     size_type tail_ = 0;
