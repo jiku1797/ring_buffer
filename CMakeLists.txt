@@ -29,6 +29,7 @@ target_link_libraries(${THIS} GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(${THIS})
+add_test(NAME ring_buffer_test_all COMMAND ${THIS})
 
 target_include_directories(${THIS} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
