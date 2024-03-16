@@ -59,6 +59,7 @@ jobs:
           - name: Upload coverage to Codecov
           uses: codecov/codecov-action@v2
           env:
-          CODECOV_TOKEN: ${{ secrets.CODE_COV_SECRET }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           with:
           file: ./build/coverage.info
+          slug: jiku1797/ring_buffer
