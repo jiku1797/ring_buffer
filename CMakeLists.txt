@@ -34,3 +34,6 @@ target_include_directories(${THIS} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/googletest/googletest/include/gtest
 )
+
+target_compile_options(${THIS} PRIVATE --coverage)
+target_link_options(${THIS} PRIVATE --coverage)
