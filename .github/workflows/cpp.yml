@@ -59,6 +59,6 @@ jobs:
           - name: Upload coverage reports to Codecov
           uses: codecov/codecov-action@v4.0.1
           with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODE_COV_SECRET }}
           slug: jiku1797/ring_buffer
 
