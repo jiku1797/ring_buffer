@@ -56,9 +56,9 @@ jobs:
           lcov --capture --directory . --output-file coverage.info        
           lcov --list coverage.info
 
-          - name: Upload coverage reports to Codecov
-          uses: codecov/codecov-action@v4.0.1
+          - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v2
+          env:
+          CODECOV_TOKEN: ${{ secrets.CODE_COV_SECRET }}
           with:
-          token: ${{ secrets.CODE_COV_SECRET }}
-          slug: jiku1797/ring_buffer
-
+          file: ./build/coverage.info
